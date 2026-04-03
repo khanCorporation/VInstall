@@ -87,7 +87,7 @@ The signed release APK will be automatically attached to the corresponding GitHu
 
 ## Gradle Wrapper
 
-The `gradle/wrapper/gradle-wrapper.jar` file is not included in the repository. Generate it before building:
+The `gradle/wrapper/gradle-wrapper.jar` file is included in the repository. However, if you want to generate the file again, just type:
 
 ```bash
 gradle wrapper --gradle-version=8.4
