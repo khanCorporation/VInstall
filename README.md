@@ -37,7 +37,9 @@ Browse all installed user apps with the ability to:
 - Uninstall the app (supports Normal, Root, and Shizuku modes)
 - Compute and copy the APK hash (MD5, SHA-1, SHA-256)
 
-Backups are saved to `Documents/VInstall/Backups/` on external storage.
+### Backup
+
+Export any installed user app as an `.apkv` archive directly from the App Manager or the dedicated Backup screen. Backups are saved to `Documents/VInstall/Backups/` on external storage. Optional password-based encryption is supported when exporting.
 
 ### Settings
 
@@ -53,7 +55,7 @@ Backups are saved to `Documents/VInstall/Backups/` on external storage.
 
 - Android 5.0 (API 21) or higher
 - "Install unknown apps" permission granted for this app
-- "All Files Access" permission required for XAPK packages that include OBB data (Android 11+)
+- "All Files Access" permission required for XAPK packages that include OBB data and for writing backups to external storage (Android 11+)
 - Root access required when using Root mode
 - [Shizuku](https://shizuku.rikka.app/) installed and running when using Shizuku mode
 
@@ -66,6 +68,8 @@ Backups are saved to `Documents/VInstall/Backups/` on external storage.
 ```
 
 ### Release
+
+#### Using GitHub Actions (CI)
 
 Before triggering a release build, create a keystore and configure the following secrets in your GitHub repository settings:
 
@@ -85,12 +89,29 @@ git push origin v1.0.0
 
 The signed release APK will be automatically attached to the corresponding GitHub Release.
 
+#### Using a Local Keystore
+
+Alternatively, you can build a signed release APK locally by adding the following properties to your `local.properties` file:
+
+```properties
+STORE_FILE=/absolute/path/to/your/keystore.jks
+STORE_PASSWORD=your_store_password
+KEY_ALIAS=your_key_alias
+KEY_PASSWORD=your_key_password
+```
+
+Then run:
+
+```bash
+./gradlew assembleRelease
+```
+
 ## Gradle Wrapper
 
 The `gradle/wrapper/gradle-wrapper.jar` file is included in the repository. However, if you want to generate the file again, just type:
 
 ```bash
-gradle wrapper --gradle-version=8.4
+gradle wrapper --gradle-version=9.4.1
 ```
 
 ## APKv Format
