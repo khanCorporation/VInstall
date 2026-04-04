@@ -1,5 +1,6 @@
 package com.vinstall.alwiz.appmanager
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -15,6 +16,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.TextInputEditText
@@ -30,7 +33,7 @@ import com.vinstall.alwiz.settings.InstallMode
 import com.vinstall.alwiz.util.DebugLog
 import com.vinstall.alwiz.util.FileUtil
 import com.vinstall.alwiz.util.HashUtil
-import com.vinstall.alwiz.util.UninstallHelper
+import com.vinstall.alwiz.installer.UninstallHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -51,13 +54,9 @@ class AppDetailActivity : AppCompatActivity() {
 
     private val uninstallLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) {
-        val pkg = currentApp?.packageName ?: return@registerForActivityResult
-        val pm = packageManager
-        try {
-            pm.getPackageInfo(pkg, 0)
-        } catch (_: Exception) {
-            DebugLog.i("AppDetail", "Uninstall successful (activity result): $pkg")
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            DebugLog.i("AppDetail", "Uninstall successful (normal mode): ${currentApp?.packageName}")
             Toast.makeText(this, getString(R.string.uninstall_success), Toast.LENGTH_SHORT).show()
             finish()
         }
@@ -67,6 +66,12 @@ class AppDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAppDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            insets
+        }
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -134,7 +139,7 @@ class AppDetailActivity : AppCompatActivity() {
         val permText = if (app.requestedPermissions.isEmpty()) {
             getString(R.string.no_permissions)
         } else {
-            app.requestedPermissions.joinToString("\\n") { "• $it" }
+            app.requestedPermissions.joinToString("\n") { "• $it" }
         }
         binding.textPermissions.text = permText
 
@@ -221,8 +226,9 @@ class AppDetailActivity : AppCompatActivity() {
     private fun performUninstall(app: AppInfo, mode: InstallMode) {
         if (mode == InstallMode.NORMAL) {
             DebugLog.d("AppDetail", "Uninstall normal mode: ${app.packageName}")
-            val intent = Intent(Intent.ACTION_DELETE).apply {
+            val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE).apply {
                 data = Uri.parse("package:${app.packageName}")
+                putExtra(Intent.EXTRA_RETURN_RESULT, true)
             }
             uninstallLauncher.launch(intent)
             return

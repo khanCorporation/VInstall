@@ -1,9 +1,10 @@
-package com.vinstall.alwiz.util
+package com.vinstall.alwiz.installer
 
 import android.content.Context
 import com.vinstall.alwiz.settings.AppSettings
 import com.vinstall.alwiz.settings.InstallMode
 import com.vinstall.alwiz.shizuku.ShizukuHelper
+import com.vinstall.alwiz.util.DebugLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

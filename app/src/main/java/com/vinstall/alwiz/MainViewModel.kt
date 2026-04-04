@@ -15,7 +15,7 @@ import com.vinstall.alwiz.model.PackageFormat
 import com.vinstall.alwiz.settings.AppSettings
 import com.vinstall.alwiz.util.DebugLog
 import com.vinstall.alwiz.util.FileUtil
-import com.vinstall.alwiz.util.InstallEvents
+import com.vinstall.alwiz.installer.InstallHelper
 import com.vinstall.alwiz.util.MetadataReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -202,7 +202,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun cancelInstall() {
         currentInstallJob?.cancel()
         currentInstallJob = null
-        InstallEvents.reset()
+        InstallHelper.reset()
         val previous = _state.value
         if (previous is InstallState.Installing || previous is InstallState.Analyzing) {
             _state.value = InstallState.Cancelled("Installation cancelled by user.")
@@ -218,7 +218,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         DebugLog.i("MainViewModel", "Starting installation mode=$mode format=${current.format}")
 
         currentInstallJob = viewModelScope.launch(Dispatchers.IO) {
-            InstallEvents.reset()
+            InstallHelper.reset()
             _state.value = InstallState.Analyzing
 
             val result = when (current.format) {
@@ -266,7 +266,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
             DebugLog.d("MainViewModel", "Waiting for installation result...")
             val installResult = withContext(Dispatchers.IO) {
-                InstallEvents.awaitResult(timeoutMs = 120_000L)
+                InstallHelper.awaitResult(timeoutMs = 120_000L)
             }
 
             if (installResult == null) {
@@ -281,8 +281,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
             DebugLog.i("MainViewModel", "Install result: $installResult")
             _state.value = when (installResult) {
-                is InstallEvents.Result.Success -> InstallState.Success
-                is InstallEvents.Result.Failure -> {
+                is InstallHelper.Result.Success -> InstallState.Success
+                is InstallHelper.Result.Failure -> {
                     val msg = installResult.message ?: "Install failed"
                     if (msg.contains("cancelled", ignoreCase = true) ||
                         msg.contains("aborted", ignoreCase = true)) {

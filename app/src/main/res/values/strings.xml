@@ -3,7 +3,7 @@
     <string name="select_file">Select File</string>
     <string name="install">Install</string>
     <string name="no_file_selected">No file selected</string>
-    <string name="tap_to_select">Tap \"Select File\" to choose an APK, XAPK, APKS, APKM, or ZIP package.</string>
+    <string name="tap_to_select">Tap \"Select File\" to choose an APK, XAPK, APKS, APKM, APKV, or ZIP package.</string>
     <string name="format_label">Format</string>
     <string name="size_label">Size</string>
     <string name="analyzing">Analyzing package…</string>

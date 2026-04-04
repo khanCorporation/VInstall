@@ -3,8 +3,6 @@ package com.vinstall.alwiz.settings
 import android.content.Context
 import android.content.SharedPreferences
 
-enum class InstallMode { NORMAL, ROOT, SHIZUKU }
-
 object AppSettings {
 
     private const val PREFS_NAME = "vinstall_prefs"

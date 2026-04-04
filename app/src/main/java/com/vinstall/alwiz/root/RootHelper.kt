@@ -1,4 +1,6 @@
-package com.vinstall.alwiz.util
+package com.vinstall.alwiz.root
+
+import com.vinstall.alwiz.util.DebugLog
 
 object RootHelper {
 

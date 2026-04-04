@@ -11,7 +11,7 @@ import com.vinstall.alwiz.settings.AppSettings
 import com.vinstall.alwiz.settings.InstallMode
 import com.vinstall.alwiz.shizuku.ShizukuHelper
 import com.vinstall.alwiz.util.DebugLog
-import com.vinstall.alwiz.util.RootHelper
+import com.vinstall.alwiz.root.RootHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -187,7 +187,7 @@ object SplitInstaller {
                 DebugLog.d("SplitInstaller", "Shizuku commit: $commitOutput")
 
                 if (commitOutput.contains("Success", ignoreCase = true)) {
-                    com.vinstall.alwiz.util.InstallEvents.emit(com.vinstall.alwiz.util.InstallEvents.Result.Success)
+                    com.vinstall.alwiz.installer.InstallHelper.emit(com.vinstall.alwiz.installer.InstallHelper.Result.Success)
                     Result.success(Unit)
                 } else {
                     val friendlyMessage = parseInstallError(commitOutput)
@@ -233,7 +233,7 @@ object SplitInstaller {
                 DebugLog.d("SplitInstaller", "Root commit: $commitOutput")
 
                 if (commitOutput.contains("Success", ignoreCase = true)) {
-                    com.vinstall.alwiz.util.InstallEvents.emit(com.vinstall.alwiz.util.InstallEvents.Result.Success)
+                    com.vinstall.alwiz.installer.InstallHelper.emit(com.vinstall.alwiz.installer.InstallHelper.Result.Success)
                     Result.success(Unit)
                 } else {
                     val friendlyMessage = parseInstallError(commitOutput)

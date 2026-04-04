@@ -10,7 +10,7 @@ import com.vinstall.alwiz.R
 import com.vinstall.alwiz.databinding.ActivitySettingsBinding
 import com.vinstall.alwiz.shizuku.ShizukuHelper
 import com.vinstall.alwiz.util.DebugLog
-import com.vinstall.alwiz.util.RootHelper
+import com.vinstall.alwiz.root.RootHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

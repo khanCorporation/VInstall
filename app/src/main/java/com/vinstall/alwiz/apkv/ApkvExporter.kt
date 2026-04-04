@@ -1,4 +1,4 @@
-package com.vinstall.alwiz.backup
+package com.vinstall.alwiz.apkv
 
 import android.content.Context
 import android.graphics.Bitmap
