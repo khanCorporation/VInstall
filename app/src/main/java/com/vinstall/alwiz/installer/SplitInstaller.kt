@@ -50,7 +50,12 @@ object SplitInstaller {
             }
             InstallMode.SHIZUKU -> {
                 if (ShizukuHelper.isAvailable() && ShizukuHelper.isGranted()) {
-                    installViaShizuku(context, filesToInstall)
+                    if (ShizukuHelper.isNewProcessAvailable()) {
+                        installViaShizuku(context, filesToInstall)
+                    } else {
+                        DebugLog.e("SplitInstaller", "Shizuku newProcess not available, falling back to session")
+                        installViaSession(context, filesToInstall)
+                    }
                 } else {
                     DebugLog.e("SplitInstaller", "SHIZUKU mode selected but Shizuku is not active/permitted, falling back to session")
                     installViaSession(context, filesToInstall)

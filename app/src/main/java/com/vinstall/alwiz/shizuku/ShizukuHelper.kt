@@ -21,6 +21,18 @@ object ShizukuHelper {
         false
     }
 
+    fun isNewProcessAvailable(): Boolean = try {
+        Class.forName("rikka.shizuku.Shizuku")
+            .getDeclaredMethod("newProcess",
+                Array<String>::class.java,
+                Array<String>::class.java,
+                String::class.java)
+        true
+    } catch (_: NoSuchMethodException) {
+        false
+    }
+
+    // A relic of the past - once planned, never used, but too memorable to remove :)
     fun isSuiAvailable(): Boolean {
         return try {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) false

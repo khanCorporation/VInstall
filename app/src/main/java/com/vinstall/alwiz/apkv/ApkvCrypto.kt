@@ -1,5 +1,7 @@
 package com.vinstall.alwiz.apkv
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider
+import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
@@ -48,9 +50,20 @@ object ApkvCrypto {
     }
 
     private fun deriveKey(password: String, salt: ByteArray): SecretKeySpec {
+        val factory = try {
+            SecretKeyFactory.getInstance(KDF_ALGORITHM)
+        } catch (_: NoSuchAlgorithmException) {
+            SecretKeyFactory.getInstance(KDF_ALGORITHM, BouncyCastleProvider())
+        }
         val spec = PBEKeySpec(password.toCharArray(), salt, KDF_ITERATIONS, KEY_BIT_LENGTH)
-        val raw = SecretKeyFactory.getInstance(KDF_ALGORITHM).generateSecret(spec).encoded
+        val raw = factory.generateSecret(spec).encoded
         return SecretKeySpec(raw, KEY_ALGORITHM)
+    }
+
+    fun createKeyFactory(): SecretKeyFactory = try {
+        SecretKeyFactory.getInstance(KDF_ALGORITHM)
+    } catch (_: NoSuchAlgorithmException) {
+        SecretKeyFactory.getInstance(KDF_ALGORITHM, BouncyCastleProvider())
     }
 
     private fun randomBytes(length: Int): ByteArray =

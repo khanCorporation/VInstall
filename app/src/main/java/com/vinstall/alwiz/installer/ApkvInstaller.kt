@@ -274,7 +274,7 @@ object ApkvInstaller {
                 val iv   = ByteArray(ApkvCrypto.IV_BYTE_LENGTH).also   { dis.readFully(it) }
 
                 val keySpec = PBEKeySpec(password.toCharArray(), salt, ApkvCrypto.KDF_ITERATIONS, ApkvCrypto.KEY_BIT_LENGTH)
-                val rawKey  = SecretKeyFactory.getInstance(ApkvCrypto.KDF_ALGORITHM).generateSecret(keySpec).encoded
+                val rawKey = ApkvCrypto.createKeyFactory().generateSecret(keySpec).encoded
                 val key     = SecretKeySpec(rawKey, "AES")
 
                 val cipher = Cipher.getInstance(ApkvCrypto.CIPHER_ALGORITHM)

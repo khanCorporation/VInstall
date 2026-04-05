@@ -16,10 +16,15 @@ object UninstallHelper {
             when (AppSettings.getInstallMode(context)) {
                 InstallMode.ROOT -> uninstallViaRoot(packageName)
                 InstallMode.SHIZUKU -> {
-                    if (ShizukuHelper.isAvailable() && ShizukuHelper.isGranted())
-                        uninstallViaShizuku(packageName)
-                    else
+                    if (ShizukuHelper.isAvailable() && ShizukuHelper.isGranted()) {
+                        if (ShizukuHelper.isNewProcessAvailable()) {
+                            uninstallViaShizuku(packageName)
+                        } else {
+                            Result.failure(Exception("Shizuku version on this device does not support shell execution"))
+                        }
+                    } else {
                         Result.failure(Exception("Shizuku is not active or has not been granted permission"))
+                    }
                 }
                 InstallMode.NORMAL -> Result.failure(Exception("NORMAL_MODE"))
             }

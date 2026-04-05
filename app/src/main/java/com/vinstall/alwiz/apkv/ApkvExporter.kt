@@ -284,7 +284,7 @@ object ApkvExporter {
         val iv   = ByteArray(ApkvCrypto.IV_BYTE_LENGTH).also   { SecureRandom().nextBytes(it) }
 
         val spec = PBEKeySpec(password.toCharArray(), salt, ApkvCrypto.KDF_ITERATIONS, ApkvCrypto.KEY_BIT_LENGTH)
-        val raw  = SecretKeyFactory.getInstance(ApkvCrypto.KDF_ALGORITHM).generateSecret(spec).encoded
+        val raw = ApkvCrypto.createKeyFactory().generateSecret(spec).encoded
         val key  = SecretKeySpec(raw, KEY_ALGORITHM)
 
         val cipher = Cipher.getInstance(ApkvCrypto.CIPHER_ALGORITHM)
