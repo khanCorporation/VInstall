@@ -37,7 +37,7 @@ Browse all installed user apps with the ability to:
 - Uninstall the app (supports Normal, Root, and Shizuku modes)
 - Compute and copy the APK hash (MD5, SHA-1, SHA-256)
 
-### Backup
+### Backup/Export
 
 Export any installed user app as an `.apkv` archive directly from the App Manager or the dedicated Backup screen. Backups are saved to `Documents/VInstall/Backups/` on external storage. Optional password-based encryption is supported when exporting.
 
@@ -50,6 +50,7 @@ Export any installed user app as an `.apkv` archive directly from the App Manage
 | Confirm before install | Show a confirmation dialog before installing |
 | Clear cache after install | Automatically remove temp files after installation |
 | Debug window | Show or hide the in-app log viewer |
+| Crash Reports |  Logs can be viewed, copied, or cleared directly from the app |
 
 ## Requirements
 
