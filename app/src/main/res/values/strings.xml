@@ -59,6 +59,9 @@
     <string name="shizuku_granted">Shizuku permission granted.</string>
     <string name="shizuku_denied">Shizuku permission denied.</string>
     <string name="shizuku_not_supported">Shizuku: Not supported on Android 5 or below</string>
+    <string name="shizuku_request_permission">Request Permission</string>
+    <string name="shizuku_not_available_toast">Shizuku is not running. Please start Shizuku first.</string>
+    <string name="shizuku_already_granted_toast">Shizuku permission is already granted.</string>
     <string name="btn_app_manager">Apps</string>
     <string name="btn_backup_manager">Export</string>
     <string name="tag_split">Split APK</string>

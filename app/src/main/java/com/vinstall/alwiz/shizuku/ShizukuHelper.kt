@@ -14,11 +14,18 @@ object ShizukuHelper {
         false
     }
 
-    fun isGranted(): Boolean = try {
-        if (Shizuku.isPreV11()) false
-        else Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
-    } catch (_: Exception) {
-        false
+    fun isGranted(): Boolean {
+        try {
+            if (Shizuku.isPreV11()) return false
+            try {
+                val field = Shizuku::class.java.getDeclaredField("permissionGranted")
+                field.isAccessible = true
+                field.set(null, false)
+            } catch (_: Exception) {}
+            return Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
+        } catch (_: Exception) {
+            return false
+        }
     }
 
     fun isNewProcessAvailable(): Boolean = try {
@@ -43,6 +50,13 @@ object ShizukuHelper {
         } catch (_: Exception) {
             false
         }
+    }
+
+    fun shouldShowRationale(): Boolean = try {
+        if (Shizuku.isPreV11()) false
+        else Shizuku.shouldShowRequestPermissionRationale()
+    } catch (_: Exception) {
+        false
     }
 
     fun requestPermission(listener: Shizuku.OnRequestPermissionResultListener): Boolean {

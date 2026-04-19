@@ -89,8 +89,8 @@ data class ApkvManifest(
                 encrypted = obj.optBoolean("encrypted", false),
                 hasIcon = obj.optBoolean("hasIcon", false),
                 exportedAt = obj.getLong("exportedAt"),
-                minSdkVersion = obj.getInt("minSdkVersion"),
-                targetSdkVersion = obj.getInt("targetSdkVersion"),
+                minSdkVersion = obj.optInt("minSdkVersion", 1),
+                targetSdkVersion = obj.optInt("targetSdkVersion", 1),
                 checksums = checksums,
                 totalSize = if (obj.has("totalSize")) obj.getLong("totalSize") else null,
                 permissions = permissions

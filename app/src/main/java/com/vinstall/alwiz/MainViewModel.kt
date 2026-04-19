@@ -258,6 +258,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                     else ->
                         _state.value = InstallState.Error(msg)
                 }
+                if (AppSettings.isClearCacheAfterInstall(context)) FileUtil.clearCache(context)
                 return@launch
             }
 

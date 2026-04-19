@@ -49,9 +49,19 @@ object SplitInstaller {
                 }
             }
             InstallMode.SHIZUKU -> {
-                if (ShizukuHelper.isAvailable() && ShizukuHelper.isGranted()) {
+                val liveGranted = ShizukuHelper.isAvailable() && ShizukuHelper.isGranted()
+                val storedGranted = ShizukuHelper.isAvailable() && AppSettings.isShizukuPermissionGranted(context)
+
+                if (liveGranted || storedGranted) {
                     if (ShizukuHelper.isNewProcessAvailable()) {
-                        installViaShizuku(context, filesToInstall)
+                        val result = installViaShizuku(context, filesToInstall)
+                        if (result.isFailure) {
+                            AppSettings.setShizukuPermissionGranted(context, false)
+                            DebugLog.e("SplitInstaller", "Shizuku install failed, falling back to session")
+                            installViaSession(context, filesToInstall)
+                        } else {
+                            result
+                        }
                     } else {
                         DebugLog.e("SplitInstaller", "Shizuku newProcess not available, falling back to session")
                         installViaSession(context, filesToInstall)

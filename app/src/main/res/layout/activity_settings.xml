@@ -104,6 +104,15 @@
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                             android:textColor="?attr/colorOnSurfaceVariant" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_request_shizuku"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="@string/shizuku_request_permission"
+                            android:visibility="gone" />
+
                     </LinearLayout>
 
                 </LinearLayout>

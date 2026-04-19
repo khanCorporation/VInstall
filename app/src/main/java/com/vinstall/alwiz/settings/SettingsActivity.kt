@@ -3,6 +3,7 @@ package com.vinstall.alwiz.settings
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ScrollView
@@ -10,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.vinstall.alwiz.App
 import com.vinstall.alwiz.R
@@ -21,10 +23,26 @@ import com.vinstall.alwiz.root.RootHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import rikka.shizuku.Shizuku
 
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
+
+    private val shizukuPermissionListener = Shizuku.OnRequestPermissionResultListener { _, result ->
+        val granted = result == PackageManager.PERMISSION_GRANTED
+        val msg = if (granted) getString(R.string.shizuku_granted) else getString(R.string.shizuku_denied)
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+        refreshStatusLabels()
+    }
+
+    private val shizukuBinderReceivedListener = Shizuku.OnBinderReceivedListener {
+        refreshStatusLabels()
+    }
+
+    private val shizukuBinderDeadListener = Shizuku.OnBinderDeadListener {
+        refreshStatusLabels()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +52,9 @@ class SettingsActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = getString(R.string.settings)
+
+        Shizuku.addBinderReceivedListenerSticky(shizukuBinderReceivedListener)
+        Shizuku.addBinderDeadListener(shizukuBinderDeadListener)
 
         loadCurrentSettings()
         setupListeners()
@@ -91,6 +112,13 @@ class SettingsActivity : AppCompatActivity() {
             else -> getString(R.string.shizuku_needs_grant)
         }
 
+        if (currentMode == InstallMode.SHIZUKU) {
+            binding.btnRequestShizuku.isVisible = true
+            binding.btnRequestShizuku.isEnabled = shizukuAvail && !shizukuGranted
+        } else {
+            binding.btnRequestShizuku.isVisible = false
+        }
+
         if (currentMode == InstallMode.ROOT) {
             binding.textRootStatus.text = getString(R.string.root_checking)
             lifecycleScope.launch {
@@ -126,6 +154,21 @@ class SettingsActivity : AppCompatActivity() {
             AppSettings.setInstallMode(this, mode)
             DebugLog.i("Settings", "Install mode changed to: $mode")
             refreshStatusLabels()
+        }
+
+        binding.btnRequestShizuku.setOnClickListener {
+            if (!ShizukuHelper.isAvailable()) {
+                Toast.makeText(this, getString(R.string.shizuku_not_available_toast), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (ShizukuHelper.isGranted()) {
+                Toast.makeText(this, getString(R.string.shizuku_already_granted_toast), Toast.LENGTH_SHORT).show()
+                refreshStatusLabels()
+                return@setOnClickListener
+            }
+            if (!ShizukuHelper.requestPermission(shizukuPermissionListener)) {
+                Toast.makeText(this, getString(R.string.shizuku_not_available_toast), Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.switchDebugWindow.setOnCheckedChangeListener { _, checked ->
@@ -219,5 +262,12 @@ class SettingsActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) { finish(); return true }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Shizuku.removeBinderReceivedListener(shizukuBinderReceivedListener)
+        Shizuku.removeBinderDeadListener(shizukuBinderDeadListener)
+        ShizukuHelper.removePermissionListener(shizukuPermissionListener)
     }
 }

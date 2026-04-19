@@ -40,14 +40,25 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
-    
+
     private var shizukuPermissionPending = false
+    private var isActivityResumed = false
 
     private val shizukuPermissionListener = Shizuku.OnRequestPermissionResultListener { _, result ->
         shizukuPermissionPending = false
         val granted = result == PackageManager.PERMISSION_GRANTED
+        AppSettings.setShizukuPermissionGranted(this, granted)
         val msg = if (granted) getString(R.string.shizuku_granted) else getString(R.string.shizuku_denied)
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+        updateInstallModeStatus()
+    }
+
+    private val shizukuBinderReceivedListener = Shizuku.OnBinderReceivedListener {
+        updateInstallModeStatus()
+        if (isActivityResumed) checkAndRequestShizukuPermission()
+    }
+
+    private val shizukuBinderDeadListener = Shizuku.OnBinderDeadListener {
         updateInstallModeStatus()
     }
 
@@ -71,6 +82,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         setSupportActionBar(binding.toolbar)
+
+        Shizuku.addBinderReceivedListenerSticky(shizukuBinderReceivedListener)
+        Shizuku.addBinderDeadListener(shizukuBinderDeadListener)
 
         binding.btnSelect.setOnClickListener { filePicker.launch("*/*") }
 
@@ -137,6 +151,8 @@ class MainActivity : AppCompatActivity() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val debugEnabled = AppSettings.isDebugWindowEnabled(this)
         menu.findItem(R.id.action_debug)?.isVisible = debugEnabled
+        val isShizukuMode = AppSettings.getInstallMode(this) == InstallMode.SHIZUKU
+        menu.findItem(R.id.action_request_shizuku)?.isVisible = isShizukuMode
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -150,7 +166,42 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, DebugWindowActivity::class.java))
                 true
             }
+            R.id.action_request_shizuku -> {
+                requestShizukuPermissionManually()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun checkAndRequestShizukuPermission() {
+        val mode = AppSettings.getInstallMode(this)
+        if (mode != InstallMode.SHIZUKU) return
+        if (!ShizukuHelper.isAvailable()) return
+        if (ShizukuHelper.isGranted()) return
+        if (shizukuPermissionPending) return
+        if (ShizukuHelper.shouldShowRationale()) return
+
+        shizukuPermissionPending = true
+        if (!ShizukuHelper.requestPermission(shizukuPermissionListener)) {
+            shizukuPermissionPending = false
+        }
+    }
+
+    private fun requestShizukuPermissionManually() {
+        if (!ShizukuHelper.isAvailable()) {
+            Toast.makeText(this, getString(R.string.shizuku_not_available_toast), Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (ShizukuHelper.isGranted()) {
+            Toast.makeText(this, getString(R.string.shizuku_already_granted_toast), Toast.LENGTH_SHORT).show()
+            updateInstallModeStatus()
+            return
+        }
+        shizukuPermissionPending = true
+        if (!ShizukuHelper.requestPermission(shizukuPermissionListener)) {
+            shizukuPermissionPending = false
+            Toast.makeText(this, getString(R.string.shizuku_not_available_toast), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -360,11 +411,6 @@ class MainActivity : AppCompatActivity() {
                 InstallMode.SHIZUKU -> if (shizukuAvail && shizukuGranted) R.drawable.dot_active else R.drawable.dot_pending
             }
         )
-
-        if (mode == InstallMode.SHIZUKU && shizukuAvail && !shizukuGranted && !shizukuPermissionPending) {
-            shizukuPermissionPending = true
-            ShizukuHelper.requestPermission(shizukuPermissionListener)
-        }
     }
 
     private fun needsStoragePermission(): Boolean {
@@ -391,14 +437,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        isActivityResumed = true
         updateInstallModeStatus()
+        checkAndRequestShizukuPermission()
         val debugEnabled = AppSettings.isDebugWindowEnabled(this)
         binding.btnDebug.isVisible = debugEnabled
         invalidateOptionsMenu()
     }
 
+    override fun onPause() {
+        super.onPause()
+        isActivityResumed = false
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        Shizuku.removeBinderReceivedListener(shizukuBinderReceivedListener)
+        Shizuku.removeBinderDeadListener(shizukuBinderDeadListener)
         ShizukuHelper.removePermissionListener(shizukuPermissionListener)
     }
 }

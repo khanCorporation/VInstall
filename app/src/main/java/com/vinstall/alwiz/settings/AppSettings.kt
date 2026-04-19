@@ -11,6 +11,7 @@ object AppSettings {
     private const val KEY_THEME = "theme"
     private const val KEY_CLEAR_CACHE_AFTER = "clear_cache_after"
     private const val KEY_CONFIRM_INSTALL = "confirm_install"
+    private const val KEY_SHIZUKU_PERMISSION_GRANTED = "shizuku_permission_granted"
 
     private fun prefs(context: Context): SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -52,5 +53,12 @@ object AppSettings {
 
     fun setConfirmInstall(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_CONFIRM_INSTALL, enabled).apply()
+    }
+
+    fun isShizukuPermissionGranted(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_SHIZUKU_PERMISSION_GRANTED, false)
+
+    fun setShizukuPermissionGranted(context: Context, granted: Boolean) {
+        prefs(context).edit().putBoolean(KEY_SHIZUKU_PERMISSION_GRANTED, granted).apply()
     }
 }
